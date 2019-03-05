@@ -1,0 +1,19 @@
+{
+  "name": "websocket-chat-app",
+  "version": "1.0.0",
+  "description": "A simple websocket illustration",
+  "main": "chat-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Websocket",
+    "JavaScript",
+    "NodeJs"
+  ],
+  "author": "Abayomi Popoola",
+  "license": "ISC",
+  "dependencies": {
+    "websocket": "^1.0.28"
+  }
+}

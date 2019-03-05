@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>Hello World WebSocket client</title>
+     <style type="text/css">
+         body {
+            background: #000; 
+            color:green; 
+            padding: 100px;
+            font: normal 13px/100% Verdana, Tahoma, sans-serif;
+        }
+         #output {
+            border: 1px solid #ffffff;
+            width: 300px; margin: 0 auto;
+            }
+
+         #output p {
+            text-align: center;
+        }
+         .btn {
+            background: #ffffff;
+            background-image: linear-gradient(to bottom, #ffffff, #2bb82b);
+            border-radius: 28px;
+            font-family: Courier New;
+            color: #ffffff;
+            font-size: 20px;
+            padding: 10px 20px 10px 20px;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: #2bb82b;
+            background-image: linear-gradient(to bottom, #2bb82b, #ffffff);
+            text-decoration: none;
+        }
+        input {
+            padding: 9px;
+            border: solid 1px #E5E5E5;
+            outline: 0;
+            width: 200px;
+            background: #FFFFFF;
+        }
+        input:hover, textarea:hover, input:focus, textarea:focus {
+            border-color: #C9C9C9;
+        }
+     </style>
+     <script language="javascript" type="text/javascript">
+        var wsUrl = getRootUri();
+        var websocket = null;
+        function getRootUri() {
+            return "ws://localhost:8080/";
+        }
+        function init() {
+            output = document.getElementById("output");
+        }
+        function initWebSocket() {
+            websocket = new WebSocket(wsUrl);
+            
+            websocket.onopen = function(evt) {
+                onOpen(evt);
+                doSend();
+            };
+            websocket.onmessage = function(evt) {
+                onMessage(evt);
+            };
+            websocket.onerror = function(evt) {
+                onError(evt);
+                websocket = null;
+            };
+            websocket.onclose = function(evt) {
+                onClose(evt);
+                websocket = null;
+            };
+        }
+        
+        function send_message() {
+            if (websocket == null) {
+                initWebSocket();
+            } else {
+                doSend();
+            }
+        }
+        function onOpen(evt) {
+            writeToScreen("Connected to endpoint.");
+        }
+        function onMessage(evt) {
+            writeToScreen("Message received: " + evt.data);
+        }
+        function onError(evt) {
+            writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+        }
+        function onClose(evt) {
+            writeToScreen("Connection closed.");
+        }
+        function doSend() {
+            message = text_id.value;
+            websocket.send(message);
+            writeToScreen("Message Sent: " + message);
+        }
+        function writeToScreen(message) {
+            var pre = document.createElement("p");
+            pre.style.wordWrap = "break-word";
+            pre.innerHTML = message;
+            
+            output.appendChild(pre);
+        }
+        window.addEventListener("load", init, false);
+     </script>
+</head>
+<body>
+     <h1 style="text-align: center;">"Hello World" WebSocket client</h1>
+     <br>
+     <div style="text-align: center;">
+         <form action="">
+             <input id="text_id" name="message" value="datum" type="text">
+             <input onclick="send_message()" value="Send" type="button" class="btn">
+         </form>
+     </div>
+     <h2 align="center">Console:</h2>
+     <div id="output"></div>
+</body>
+</html>
